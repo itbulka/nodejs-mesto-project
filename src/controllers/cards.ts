@@ -26,7 +26,7 @@ export const createCard = async (
     const { name, link } = req.body;
     const user = res.locals.user._id;
     const card = await Cards.create({ name, link, owner: user });
-    return res.send(card);
+    return res.status(201).send(card);
   } catch (err) {
     if (err instanceof mongoose.Error.ValidationError) {
       return next(
