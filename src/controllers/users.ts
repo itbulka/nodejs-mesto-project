@@ -5,6 +5,9 @@ import mongoose from 'mongoose';
 import Users from '../models/user';
 import CustomError from '../errors/CustomError';
 import errorsCodes from '../utils/constants';
+import 'dotenv/config'
+
+const { JWT_SECRET = '' } = process.env;
 
 export const getAllUsers = async (
   req: Request,
@@ -25,7 +28,7 @@ export const getUser = async (
   next: NextFunction,
 ) => {
   try {
-    const userData = await Users.findById(req.params.userId).orFail(() => new CustomError('Пользователь с указанным _id не найден', errorsCodes.notFoundError));
+    const userData = await Users.findById(req.params.userId).orFail(() => new CustomError('Пользователь с указанным id не найден', errorsCodes.notFoundError));
     return res.send(userData);
   } catch (err) {
     if (err instanceof mongoose.Error.CastError) {
@@ -136,7 +139,7 @@ export const login = async (
     if (!matched) {
       throw new CustomError('Неправильные данные почты или пароля', errorsCodes.authError);
     }
-    const token = jwt.sign({ _id: userData._id }, 'very-strong-key', {
+    const token = jwt.sign({ _id: userData._id }, JWT_SECRET, {
       expiresIn: '7d',
     });
     return res

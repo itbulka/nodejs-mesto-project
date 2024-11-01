@@ -8,6 +8,7 @@ import { createUser, login } from './controllers/users';
 import auth from './middlewares/auth';
 import loggers from './middlewares/logger';
 import errorsCodes from './utils/constants';
+import 'dotenv/config'
 
 const { PORT = 3000 } = process.env;
 
