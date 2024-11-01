@@ -43,15 +43,18 @@ export const deleteCard = async (
   next: NextFunction,
 ) => {
   try {
-    const card = await Cards.findByIdAndDelete(req.params.cardId).orFail(() => {
+    const card = await Cards.findById(req.params.cardId).orFail(() => {
       throw new CustomError(
         'Карточка с указанным id не найдена.',
         errorsCodes.notFoundError,
       );
     });
+
     if (card.owner !== res.locals.user._id) {
       return res.send({ response: 'Вы не можете удалить данную карточку' });
     }
+
+    await card.deleteOne();
     return res.send({ result: true });
   } catch (err) {
     if (err instanceof mongoose.Error.CastError) {

@@ -27,8 +27,9 @@ export const getUser = async (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log(req.params.userId);
   try {
-    const userData = await Users.findById(req.params.userId).orFail(() => new CustomError('Пользователь с указанным id не найден', errorsCodes.notFoundError));
+    const userData = await Users.findById(req.params.userId).select('-password').orFail(() => new CustomError('Пользователь с указанным id не найден', errorsCodes.notFoundError));
     return res.send(userData);
   } catch (err) {
     if (err instanceof mongoose.Error.CastError) {
@@ -50,14 +51,17 @@ export const createUser = async (
       name, about, avatar, email, password,
     } = req.body;
     const hashPass = await bcrypt.hash(password, 10);
-    const user = await Users.create({
+    const userData = await Users.create({
       name,
       about,
       avatar,
       email,
       password: hashPass,
     });
-    return res.send(user);
+    const user = userData.toObject() as any;
+    delete user.password;
+
+    return res.status(201).send(user);
   } catch (err: any) {
     if (err.code === 11000) {
       return next(

@@ -7,20 +7,16 @@ import 'dotenv/config'
 const { JWT_SECRET = '' } = process.env;
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const { authorization } = req.headers;
+  const { authorization } = req.cookies;
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res
-      .status(errorsCodes.authError)
-      .send({ message: 'Необходима авторизация' });
+  if (!authorization) {
+    return next(new CustomError('Необходима авторизация', errorsCodes.authError));
   }
-
-  const token = authorization.replace('Bearer ', '');
 
   let payload;
 
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(authorization, JWT_SECRET);
   } catch {
     return next(new CustomError('Ошибка авторизации', 401));
   }
