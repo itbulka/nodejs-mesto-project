@@ -53,7 +53,7 @@ app.all('*', (req: Request, res: Response, next) => {
 
 app.use(loggers.errorLogger);
 
-app.use(errors);
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT);

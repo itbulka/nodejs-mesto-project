@@ -41,6 +41,26 @@ export const getUser = async (
   }
 };
 
+export const getCurrentUser = async  (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+)=> {
+  console.log(res.locals.user._id);
+  console.log('test');
+  try {
+    const user = await Users.findById(res.locals.user._id).select('-password').orFail(() => new CustomError('Пользователь с указанным id не найден', errorsCodes.notFoundError));
+    return res.send(user)
+  } catch (err) {
+    if (err instanceof mongoose.Error.CastError) {
+      return next(
+        new CustomError('Введены некорректные данные.', errorsCodes.reqError),
+      );
+    }
+    return next(err);
+  }
+}
+
 export const createUser = async (
   req: Request,
   res: Response,
@@ -67,7 +87,7 @@ export const createUser = async (
       return next(
         new CustomError(
           'Адрес электронной почты уже зарегестрирован',
-          errorsCodes.authError,
+          errorsCodes.reCreateError,
         ),
       );
     }

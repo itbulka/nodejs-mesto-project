@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { Joi, celebrate } from 'celebrate';
 import {
-  getAllUsers, getUser, updateUserAvatar, updateUserData,
+  getAllUsers, getCurrentUser, getUser, updateUserAvatar, updateUserData,
 } from '../controllers/users';
 
 const router = Router();
 
 router.get('/users', getAllUsers);
+
+router.get('/users/me', getCurrentUser);
 
 router.get('/users/:userId', celebrate({
   params: Joi.object().keys({
