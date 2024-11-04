@@ -50,8 +50,10 @@ export const deleteCard = async (
       );
     });
 
-    if (card.owner !== res.locals.user._id) {
-      return res.send({ response: 'Вы не можете удалить данную карточку' });
+    if (card.owner.toString() !== res.locals.user._id) {
+      return next(
+        new CustomError('Вы не можете удалить данную карточку', errorsCodes.notPermission),
+      );
     }
 
     await card.deleteOne();
