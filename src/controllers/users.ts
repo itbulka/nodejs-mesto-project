@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import Users from '../models/user';
-import CustomError from '../errors/CustomError';
+import Users from '../models/User';
+import CustomError from '../errors/customError';
 import errorsCodes from '../utils/constants';
-import 'dotenv/config'
+import 'dotenv/config';
 
 const { JWT_SECRET = '' } = process.env;
 
@@ -27,7 +27,6 @@ export const getUser = async (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log(req.params.userId);
   try {
     const userData = await Users.findById(req.params.userId).select('-password').orFail(() => new CustomError('Пользователь с указанным id не найден', errorsCodes.notFoundError));
     return res.send(userData);
@@ -41,16 +40,14 @@ export const getUser = async (
   }
 };
 
-export const getCurrentUser = async  (
+export const getCurrentUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
-)=> {
-  console.log(res.locals.user._id);
-  console.log('test');
+) => {
   try {
     const user = await Users.findById(res.locals.user._id).select('-password').orFail(() => new CustomError('Пользователь с указанным id не найден', errorsCodes.notFoundError));
-    return res.send(user)
+    return res.send(user);
   } catch (err) {
     if (err instanceof mongoose.Error.CastError) {
       return next(
@@ -59,7 +56,7 @@ export const getCurrentUser = async  (
     }
     return next(err);
   }
-}
+};
 
 export const createUser = async (
   req: Request,

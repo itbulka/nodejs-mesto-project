@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import user from './user';
+import user from './User';
 
 type TCard = {
   name: string,
@@ -39,4 +39,4 @@ export const cardSchema = new mongoose.Schema<TCard>({
   },
 });
 
-export default mongoose.model<TCard>('card', cardSchema)
+export default mongoose.model<TCard>('card', cardSchema);

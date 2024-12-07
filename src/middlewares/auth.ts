@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import CustomError from '../errors/CustomError';
+import CustomError from '../errors/customError';
 import errorsCodes from '../utils/constants';
-import 'dotenv/config'
+import 'dotenv/config';
 
 const { JWT_SECRET = '' } = process.env;
 

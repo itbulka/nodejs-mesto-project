@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import Cards from '../models/card';
-import CustomError from '../errors/CustomError';
+import Cards from '../models/Card';
+import CustomError from '../errors/customError';
 import errorsCodes from '../utils/constants';
 
 export const getAllCards = async (

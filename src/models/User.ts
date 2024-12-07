@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema<TUser>({
     required: false,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
-      validator: function (v: string) {
+      validator(v: string) {
         if (!v) return true; // Пропускаем валидацию, если поле пустое
         return /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/.test(v);
       },
