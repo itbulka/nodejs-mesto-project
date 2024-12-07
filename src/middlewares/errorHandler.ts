@@ -1,7 +1,7 @@
 import { ErrorRequestHandler } from 'express';
 import errorCodes from '../utils/constants';
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (err, req, res) => {
   const { statusCode = errorCodes.defaultError, message } = err;
 
   res.status(statusCode).send({

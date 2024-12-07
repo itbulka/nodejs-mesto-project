@@ -8,15 +8,16 @@ import { createUser, login } from './controllers/users';
 import auth from './middlewares/auth';
 import loggers from './middlewares/logger';
 import errorsCodes from './utils/constants';
-import CustomError from './errors/CustomError';
-import 'dotenv/config'
+import CustomError from './errors/customError';
+import 'dotenv/config';
+
 const cookieParser = require('cookie-parser');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -48,7 +49,7 @@ app.use('/', cardsRouter);
 app.all('*', (req: Request, res: Response, next) => {
   return next(
     new CustomError('Маршрут не найден', errorsCodes.notFoundError),
-  )
+  );
 });
 
 app.use(loggers.errorLogger);
